@@ -16,3 +16,4 @@ def resizeImage(img, newWidth, newHeight):
             newPhotoImage.put(rgb, (x, y))
 
     return newPhotoImage
+    
