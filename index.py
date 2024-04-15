@@ -61,7 +61,40 @@ def pause(is_paused):
         #Pause
         pygame.mixer.music.pause()
         paused = True
+def next_song():
+    next_one = song_box.curselection()
+    next_one = next_one[0] + 1
+    song = song_box.get(next_one)
+    
+    song = f'audio/{song}.mp3'
+    pygame.mixer.music.load(song)
+    pygame.mixer.music.play(loops=0)
+    
+    song_box.selection_clear(0,END)
 
+    song_box.activate(next_one)
+
+    song_box.selection_set(next_one,last=None)
+def previous_song():
+    next_one = song_box.curselection()
+    next_one = next_one[0] - 1
+    song = song_box.get(next_one)
+    
+    song = f'audio/{song}.mp3'
+    pygame.mixer.music.load(song)
+    pygame.mixer.music.play(loops=0)
+    
+    song_box.selection_clear(0,END)
+
+    song_box.activate(next_one)
+
+    song_box.selection_set(next_one,last=None)
+def delete_song():
+    song_box.delete(ANCHOR) 
+    pygame.mixer.music.stop()
+def delete_all_song():
+    song_box.delete(0,END)
+    pygame.mixer.music.stop()
 #Create PlayList Box
 song_box = Listbox(root,bg="black",fg="green",width=80,selectbackground="gray",selectforeground="black")
 song_box.pack(pady=20)
@@ -79,8 +112,8 @@ controls_frame.pack()
 
 
 #Create Player Control Buttons
-back_button = Button(controls_frame,image=back_btn,borderwidth=1)
-forward_button = Button(controls_frame,image=forward_btn,borderwidth=1)
+back_button = Button(controls_frame,image=back_btn,borderwidth=1,command=previous_song)
+forward_button = Button(controls_frame,image=forward_btn,borderwidth=1,command=next_song)
 play_button = Button(controls_frame,image=play_btn,borderwidth=1,command=play)
 pause_button = Button(controls_frame,image=pause_btn,borderwidth=1,command=lambda : pause(paused))
 stop_button = Button(controls_frame,image=stop_btn,borderwidth=1,command=stop)
@@ -105,5 +138,9 @@ add_song_menu.add_command(label="Qo'shiq",command=add_song)
 # Add Many songs to playlist
 add_song_menu.add_command(label="Qo'shiqlar",command=add_many_songs)
 
+remove_song_menu = Menu(my_menu)
+my_menu.add_cascade(label="Qo'shiq o'chirish",menu=remove_song_menu)
+remove_song_menu.add_command(label="Qo'shiqni o'chirish",command=delete_song)
+remove_song_menu.add_command(label="Qo'shiqlarni o'chirish",command=delete_all_song)
 root.mainloop()
 
