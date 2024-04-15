@@ -21,6 +21,15 @@ def add_song():
 
     #add song to ListBox
     song_box.insert(END,song)
+def add_many_songs():
+    songs = filedialog.askopenfilenames(initialdir='audio/',title="Qo'shiq tanlang",filetypes=(("mp3 Files","*.mp3"),))
+    for song in songs:
+        song = os.path.basename(song)
+        song = song.replace(".mp3", "")
+
+        #add song to ListBox
+        song_box.insert(END,song)
+
 
 #Play selected song
 def play():
@@ -88,9 +97,13 @@ stop_button.grid(row=0,column=4,padx=10)
 my_menu = Menu(root)
 root.config(menu=my_menu)
 
+# Create add song menu
 add_song_menu = Menu(my_menu)
 my_menu.add_cascade(label="Qo'shiq qo'shish",menu=add_song_menu)
-add_song_menu.add_command(label="Playlist",command=add_song)
+add_song_menu.add_command(label="Qo'shiq",command=add_song)
+
+# Add Many songs to playlist
+add_song_menu.add_command(label="Qo'shiqlar",command=add_many_songs)
 
 root.mainloop()
 
