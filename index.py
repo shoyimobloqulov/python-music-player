@@ -5,6 +5,8 @@ from tkinter import filedialog
 from mutagen.mp3 import MP3
 import os
 import time
+from tkinter import messagebox 
+
 
 root = Tk()
 root.title('JALOLOVA')
@@ -48,12 +50,15 @@ def add_many_songs():
         song_box.insert(END, song)
 
 def play():
-    song = song_box.get(ACTIVE)
-    song = f'audio/{song}.mp3'
-    pygame.mixer.music.load(song)
-    pygame.mixer.music.play(loops=0)
+    try:
+        song = song_box.get(ACTIVE)
+        song = f'audio/{song}.mp3'
+        pygame.mixer.music.load(song)
+        pygame.mixer.music.play(loops=0)
 
-    play_time()
+        play_time()
+    except Exception as e:
+        messagebox.showerror("Xatolik", "Xatolik aniqlandi. Qo'shishlarni qo'shishingiz kerak." + f"{type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: {e}") 
 
 def stop():
     pygame.mixer.music.stop()
@@ -91,18 +96,20 @@ def next_song():
             song_box.selection_set(next_one, last=None)
 
 def previous_song():
-    next_one = song_box.curselection()
-    next_one = next_one[0] - 1
-    song = song_box.get(next_one)
+    try:
+        next_one = song_box.curselection()
+        next_one = next_one[0] - 1
+        song = song_box.get(next_one)
 
-    song = f'audio/{song}.mp3'
-    pygame.mixer.music.load(song)
-    pygame.mixer.music.play(loops=0)
+        song = f'audio/{song}.mp3'
+        pygame.mixer.music.load(song)
+        pygame.mixer.music.play(loops=0)
 
-    song_box.selection_clear(0, END)
-    song_box.activate(next_one)
-    song_box.selection_set(next_one, last=None)
-
+        song_box.selection_clear(0, END)
+        song_box.activate(next_one)
+        song_box.selection_set(next_one, last=None)
+    except Exception as e:
+        messagebox.showerror("Xatolik", "Xatolik aniqlandi. " + f"{type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: {e}")
 def delete_song():
     song_box.delete(ANCHOR)
     pygame.mixer.music.stop()
@@ -114,11 +121,11 @@ def delete_all_song():
 song_box = Listbox(root, bg="black", fg="white", width=85, selectforeground="white")
 song_box.pack(pady=20)
 
-back_btn = PhotoImage(file='icons/play-back.png').subsample(4,4)
-forward_btn = PhotoImage(file='icons/play-forward.png').subsample(4,4)
-play_btn = PhotoImage(file='icons/play.png').subsample(4,4)
-pause_btn = PhotoImage(file='icons/pause.png').subsample(4,4)
-stop_btn = PhotoImage(file='icons/stop.png').subsample(4,4)
+back_btn = PhotoImage(file='icons/play-back.png').subsample(5,5)
+forward_btn = PhotoImage(file='icons/play-forward.png').subsample(5,5)
+play_btn = PhotoImage(file='icons/play.png').subsample(5,5)
+pause_btn = PhotoImage(file='icons/pause.png').subsample(5,5)
+stop_btn = PhotoImage(file='icons/stop.png').subsample(5,5)
 
 controls_frame = Frame(root)
 controls_frame.pack()
@@ -161,6 +168,6 @@ status_bar.pack(fill=X, side=BOTTOM, ipady=2)
 
 # Create Progress Bar
 progress_bar = ttk.Progressbar(root, orient=HORIZONTAL, length=400, mode='determinate')
-progress_bar.pack(pady=20)
+progress_bar.pack(pady=10)
 
 root.mainloop()
